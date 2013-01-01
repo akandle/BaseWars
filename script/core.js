@@ -226,16 +226,18 @@ GameEngine.prototype.end = function() {
 	this.gameOver = true;
 }
 
-GameEngine.prototype.draw = function(callback) {
+GameEngine.prototype.draw = function() {
+	console.log("startign draw");
 	this.ctx.clearRect(0,0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.save();
 	this.ctx.translate(this.ctx.canvas.width/2, this.ctx.canvas.height/2);
+	console.log("beginning draw of each entity");
 	for (var i = 0; i < this.entities.length; i++) {
 		this.entities[i].draw(this.ctx);
 	}
-	if (callback) {
-		callback(this);
-	}
+	//if (callback) {
+	//	callback(this);
+	//}
 	this.ctx.restore();
 }
 

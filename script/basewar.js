@@ -41,7 +41,7 @@ function BaseWar() {
 BaseWar.prototype = new GameEngine();
 BaseWar.prototype.constructor = BaseWar;
 
-BaseWar.prototype.init = function() {
+BaseWar.prototype.init = function(ctx) {
 	//Will probably run something within this or the next, or
 	//a previos function not linked to all this
 	//the function or methods of this object
@@ -58,6 +58,7 @@ BaseWar.prototype.init = function() {
 	//Also need some sort of array of players
 	//where we look at what color they are
 	//so this can be assigned to the color object
+	GameEngine.prototype.init.call(this, ctx);
 
 }
 
@@ -95,5 +96,6 @@ BaseWar.prototype.update = function() {
 }
 
 BaseWar.prototype.draw = function () {
-
+	console.log("BaseWar draw function");
+	GameEngine.prototype.draw.call(this);
 }
