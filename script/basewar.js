@@ -21,6 +21,13 @@ function Base(game, x, y, path) {
 Base.prototype = new Entity();
 Base.prototype.constructor = Base;
 
+Base.prototype.update = function() {
+
+}
+
+Base.prototype.draw = function() {
+	//start here
+}
 
 ///Main game object for BaseWar
 function BaseWar() {
@@ -74,3 +81,10 @@ BaseWar.prototype.start = function() {
 	GameEngine.prototype.start.call(this);
 }
 
+BaseWar.prototype.update = function() {
+
+}
+
+BaseWar.prototype.draw = function () {
+
+}
