@@ -1,4 +1,5 @@
-function Player() {
+function Player(game, color) {
+	console.log("creating new player" + color);
 	this.baseList = [];	
 	this.color = color;
 
@@ -13,7 +14,10 @@ function Player() {
 //change according to its ownership... now where to add
 //ownership...
 function Base(game, x, y, path) {
-	Entity.call(this, game, x, y);
+	console.log("Creating a base");
+	this.x = x;
+	this.y = y;
+	Entity.call(this, game, this.x, this.y);
 	this.sprite = ASSET_MANAGER.getAsset(path);
 	this.ownership = '';
 }
@@ -25,8 +29,9 @@ Base.prototype.update = function() {
 
 }
 
-Base.prototype.draw = function() {
-	//start here
+Base.prototype.draw = function(ctx) {
+	console.log("drawing Base");
+	ctx.drawImage(this.sprite, this.x, this.y);
 }
 
 ///Main game object for BaseWar
@@ -59,8 +64,12 @@ BaseWar.prototype.init = function() {
 BaseWar.prototype.start = function() {
 
 	//create two arbitrary players to begin
-	this.player1 = new Player(this, green);
-	this.player2 = new Player(this, red);
+	console.log("starting BaseWar");
+	console.log("starting BaseWar");
+	this.player1 = new Player(this, 'green');
+	console.log("added first player");
+	this.player2 = new Player(this, 'red');
+	console.log("added second player");
 
 	//This is were we create the beginning objects that will be drawn
 	//and then add them to the entity array
@@ -68,7 +77,7 @@ BaseWar.prototype.start = function() {
 	//only four bases
 
 
-	this.base1 = new Base(this, 100, 100, 'img/green-base.png');
+	this.base1 = new Base(this, 0, 0, 'img/green-base.png');
 	this.base2 = new Base(this, 200, 200, 'img/green-base.png');
 	this.base3 = new Base(this, 500, 500, 'img/green-base.png');
 	this.base4 = new Base(this, 500, 700, 'img/green-base.png');
