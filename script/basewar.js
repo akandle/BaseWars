@@ -1,3 +1,62 @@
+function Projectile(game, x, y, angle, targetXy) {
+	Entity.call(this, game, x, y);
+	this.angle = angle;
+	this.targetXy = targetXy;
+	this.speed = 100;
+	this.radial_distance = 10;
+	this.sprite = ASSET_MANAGER.getAsset('img/bullet.png');
+	this.animation = new Animation (this.sprite, 7, 0.05, true);
+}
+
+Projectile.prototype = new Entity();
+Projectile.prototype.contructor = Projectile;
+
+Projectile.prototype.update = function() {
+	if (Math.abs(this.x) >= Math.abs(targetXy.x) || Math.abs(this.y) >= Math.abs(targetXy.y)) {
+		ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
+		this.game.addEntity(new ProjectileExplosion(this.game, this.targetXy.x, this.targetXy.y));
+		this.removeFromWorld = true;
+	} else {
+		this.x = this.radial_distance * Math.cos(this.angle);
+		this.y = this.radial_distance * Math.sin(this.angle);
+		this.radial_distance += this.speed * this.game.clockTick;
+	}
+}
+
+Projectile.prototype.draw = function(ctx) {
+	ctx.save();
+	ctx.translate(this.x, this.y);
+	ctx.rotate(this.angle + Math.PI/2);
+	ctx.translate(-this.x, -this.y);
+	this.animation.drawFram(this.game.clockTick, ctx, this.x, this.y);
+	ctx.restore();
+}
+
+function ProjectileExplosion(game, x, y) {
+	Entity.call(this, game, x, y);
+	this.sprite = ASSET_MANAGER.getAsset('img/explosion.png');
+	this.animation = new Animation(this.sprite, 34, 0.05);
+	this.radius = this.animation.frameWidth/2;
+}
+
+ProjectileExplosion.prototype = new Entity();
+ProjectileExplosion.prototype.contructor = ProjectileExplosion;
+
+ProjectileExplosion.prototype.update = function() {
+	Entity.prototype.update.call(this);
+
+	if(this.animation.isDone()) {
+		this.removeFromWorld = true;
+		return;
+	}
+
+	this.radius = (this.animation.frameWidth/2) * this.scaleFactor();
+
+	for (var i = 0; i < this.game.entities.length; i++) {
+
+	}
+}
+
 function Player(game, color) {
 	console.log("creating new player" + color);
 	this.baseList = [];	
@@ -26,12 +85,20 @@ Base.prototype = new Entity();
 Base.prototype.constructor = Base;
 
 Base.prototype.update = function() {
-
+	if(this.game.click) {
+		this.shoot();
+	}
 }
 
 Base.prototype.draw = function(ctx) {
 	console.log("drawing Base");
 	ctx.drawImage(this.sprite, this.x, this.y);
+}
+
+Base.prototype.shoot = function() {
+	var projectile = new Projectile();
+	this.game.addEntity(projectile);
+	ASSET_MANAGER.getSound('audio/bullet.mp3');
 }
 
 ///Main game object for BaseWar
@@ -92,7 +159,7 @@ BaseWar.prototype.start = function() {
 }
 
 BaseWar.prototype.update = function() {
-
+	GameEngine.prototype.update.call(this);
 }
 
 BaseWar.prototype.draw = function () {
