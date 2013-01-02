@@ -78,10 +78,10 @@ BaseWar.prototype.start = function() {
 	//only four bases
 
 
-	this.base1 = new Base(this, 0, 0, 'img/green-base.png');
-	this.base2 = new Base(this, 200, 200, 'img/green-base.png');
-	this.base3 = new Base(this, 500, 500, 'img/green-base.png');
-	this.base4 = new Base(this, 500, 700, 'img/green-base.png');
+	this.base1 = new Base(this, 0, 0, 'img/neutral-base.png');
+	this.base2 = new Base(this, 200, 330, 'img/red-base.png');
+	this.base3 = new Base(this, -100, 300, 'img/green-base.png');
+	this.base4 = new Base(this, 200, -200, 'img/green-base.png');
 	this.addEntity(this.base1);
 	this.addEntity(this.base2);
 	this.addEntity(this.base3);
