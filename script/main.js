@@ -6,8 +6,18 @@ var game = new BaseWar();
 var ASSET_MANAGER = new AssetManager();
 
 //Preload all images and sounds
-ASSET_MANAGER.queueDownload('img/green-base.png');
-ASSET_MANAGER.queueDownload('img/red-base.png');
+ASSET_MANAGER.queueDownload('img/Green-Small.png');
+ASSET_MANAGER.queueDownload('img/Green-Medium.png');
+ASSET_MANAGER.queueDownload('img/Green-Large.png');
+ASSET_MANAGER.queueDownload('img/Red-Small.png');
+ASSET_MANAGER.queueDownload('img/Red-Medium.png');
+ASSET_MANAGER.queueDownload('img/Red-Large.png');
+ASSET_MANAGER.queueDownload('img/Grey-Small.png');
+ASSET_MANAGER.queueDownload('img/Grey-Medium.png');
+ASSET_MANAGER.queueDownload('img/Grey-Large.png');
+ASSET_MANAGER.queueDownload('img/Click-Option-Small.png');
+ASSET_MANAGER.queueDownload('img/Click-Option-Medium.png');
+ASSET_MANAGER.queueDownload('img/Click-Option-Large.png');
 ASSET_MANAGER.queueDownload('img/bullet.png');
 ASSET_MANAGER.queueDownload('img/neutral-base.png');
 ASSET_MANAGER.queueDownload('img/explosion.png');

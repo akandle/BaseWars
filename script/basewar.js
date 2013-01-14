@@ -147,9 +147,9 @@ BaseWar.prototype.start = function() {
 
 
 	this.base1 = new Base(this, 10, 10, 'img/Green-Large.png');
-	this.base2 = new Base(this, 200, 330, 'img/red-base.png');
-	this.base3 = new Base(this, -50, 300, 'img/green-base.png');
-	this.base4 = new Base(this, 200, -200, 'img/green-base.png');
+	this.base2 = new Base(this, 200, 330, 'img/Red-Small.png');
+	this.base3 = new Base(this, -50, 300, 'img/Grey-Medium.png');
+	this.base4 = new Base(this, 200, -200, 'img/Grey-Large.png');
 	this.addEntity(this.base1);
 	this.addEntity(this.base2);
 	this.addEntity(this.base3);
