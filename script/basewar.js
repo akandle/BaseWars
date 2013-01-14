@@ -92,7 +92,8 @@ Base.prototype.update = function() {
 
 Base.prototype.draw = function(ctx) {
 	console.log("drawing Base");
-	ctx.drawImage(this.sprite, this.x, this.y);
+	this.drawSpriteCentered(ctx);
+	//ctx.drawImage(this.sprite, this.x, this.y);
 }
 
 Base.prototype.shoot = function() {
