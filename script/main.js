@@ -19,7 +19,6 @@ ASSET_MANAGER.queueDownload('img/Click-Option-Small.png');
 ASSET_MANAGER.queueDownload('img/Click-Option-Medium.png');
 ASSET_MANAGER.queueDownload('img/Click-Option-Large.png');
 ASSET_MANAGER.queueDownload('img/bullet.png');
-ASSET_MANAGER.queueDownload('img/neutral-base.png');
 ASSET_MANAGER.queueDownload('img/explosion.png');
 ASSET_MANAGER.queueSound('alien-boom', 'audio/alien_boom.mp3');
 ASSET_MANAGER.queueSound('bullet-boom', 'audio/bullet_boom.mp3');

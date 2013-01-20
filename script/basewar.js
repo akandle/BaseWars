@@ -57,10 +57,11 @@ ProjectileExplosion.prototype.update = function() {
 	}
 }
 */
-function Player(game, color) {
-	console.log("creating new player" + color);
+function Player(game, color, name) {
+	console.log("creating new player " + color);
 	this.baseList = [];	
 	this.color = color;
+	this.name = name;
 
 }
 
@@ -95,12 +96,12 @@ Base.prototype.update = function() {
 }
 
 Base.prototype.draw = function(ctx) {
-	console.log("drawing Base");
 	this.drawSpriteCentered(ctx);
 	if (this.selected){
-		if(this.size = 'L') {
+		console.log("base selected");
+		if(this.size === 'L') {
 			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Large.png'), (this.x - 50), (this.y - 50));
-		} else if (this.size = 'M') {
+		} else if (this.size === 'M') {
 			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Medium.png'), (this.x - 25), (this.y - 25));
 		}else {
 			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Small.png'), (this.x - 12.5), (this.y - 12.5));
@@ -109,15 +110,16 @@ Base.prototype.draw = function(ctx) {
 	//ctx.drawImage(this.sprite, this.x, this.y);
 }
 
-Base.prototype.shoot = function() {
+/*Base.prototype.shoot = function() {
 	var projectile = new Projectile();
 	this.game.addEntity(projectile);
 	ASSET_MANAGER.getSound('audio/bullet.mp3');
-}
+} */
 
 ///Main game object for BaseWar
 function BaseWar() {
-	this.selected = [];
+	this.selections = [];
+	this.activePlayers = [];
 	GameEngine.call(this);
 }
 BaseWar.prototype = new GameEngine();
@@ -148,10 +150,9 @@ BaseWar.prototype.start = function() {
 
 	//create two arbitrary players to begin
 	console.log("starting BaseWar");
-	console.log("starting BaseWar");
-	this.player1 = new Player(this, 'green');
+	this.player1 = new Player(this, 'green', 'player1');
 	console.log("added first player");
-	this.player2 = new Player(this, 'red');
+	this.player2 = new Player(this, 'red', 'player2');
 	console.log("added second player");
 
 	//This is were we create the beginning objects that will be drawn
@@ -160,10 +161,10 @@ BaseWar.prototype.start = function() {
 	//only four bases
 
 
-	this.base1 = new Base(this, 10, 10, 'img/Green-Large.png', 'L', this.player1);
-	this.base2 = new Base(this, 100,100, 'img/Red-Small.png', 'S', this.player2);
-	this.base3 = new Base(this, -75,-75, 'img/Green-Medium.png', 'M', this.player1);
-	this.base4 = new Base(this, 100, -100, 'img/Gray-Large.png', 'L', this.player2);
+	this.base1 = new Base(this, 10, 10, 'img/Green-Large.png', 'L', this.player1.name);
+	this.base2 = new Base(this, 100,100, 'img/Red-Small.png', 'S', this.player2.name);
+	this.base3 = new Base(this, -75,-75, 'img/Green-Medium.png', 'M', this.player1.name);
+	this.base4 = new Base(this, 100, -100, 'img/Gray-Large.png', 'L', this.player2.name);
 	this.addEntity(this.base1);
 	this.addEntity(this.base2);
 	this.addEntity(this.base3);
@@ -175,11 +176,25 @@ BaseWar.prototype.start = function() {
 
 BaseWar.prototype.update = function() {
 	if (this.click) {
+		console.log("click detected");
 		for (var i = 0; i < this.entities.length; i++) {
 			var base = this.entities[i];
 			if (base instanceof Base && this.isClicked(base)) {
-				console.log("base has been clicked");
-				base.selected = true;
+				if (base.ownership === 'player2' && this.selections) {
+					//Shoot method... not sure on this one yet
+				} else if (base.ownership === 'player1') {
+					console.log("base selected .... ?");
+					//add to selected bases array
+					//set firstClick to true
+					base.selected = true;
+					this.addSelection(base);
+
+				} else {
+					this.addSelection.length = 0;
+				}
+				//nothing should be selected if-
+				//no base is selected and user click enemy
+				//user clicks nothingness
 			}
 		}
 	}
@@ -193,13 +208,15 @@ BaseWar.prototype.isClicked = function(base) {
 }
 
 BaseWar.prototype.draw = function () {
-	console.log("BaseWar draw function");
 	GameEngine.prototype.draw.call(this);
 }
 
+BaseWar.prototype.addSelection = function(base) {
+	this.selections.push(base);
+}
 
-//Jack Off Material
-//Fickin bicshit
+
+//for illustrative purposes
 /*
 	if (this.game.click) {
 		this.shoot();

@@ -51,7 +51,7 @@ AssetManager.prototype.downloadAll = function(callback) {
 			}
 		}, false ); //Explicit I guess??
 		img.addEventListener("error", function() {
-			console.log(this.src + ' is fucked!!');
+			console.log(this.src + ' is not right!!');
 			that.errorCount += 1;
 			if (that.isDone()) {
 				callback();
@@ -66,7 +66,7 @@ AssetManager.prototype.downloadSounds = function(callback) {
 	var that = this;
 	console.log("downloadSounds started");
 	soundManager.onready(function() {
-		console.log('Sound manager is ready for assction lol');
+		console.log('Sound manager is ready for action');
 		console.log(that.soundsQueue.length);
 		for (var i = 0; i < that.soundsQueue.length; i++) {
 			console.log("reading " + that.soundsQueue[i].id);
@@ -83,7 +83,7 @@ AssetManager.prototype.downloadSound = function(id, path, callback) {
 		autoLoad: true,
 		url: path,
 		onload: function() {
-			console.log(this.url + ' sound is loaded bitch');
+			console.log(this.url + ' sound is loaded');
 			that.successCount += 1;
 			if(that.isDone()) {
 				callback();
@@ -227,11 +227,9 @@ GameEngine.prototype.end = function() {
 }
 
 GameEngine.prototype.draw = function() {
-	console.log("startign draw");
 	this.ctx.clearRect(0,0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.save();
 	this.ctx.translate(this.ctx.canvas.width/2, this.ctx.canvas.height/2);
-	console.log("beginning draw of each entity");
 	for (var i = 0; i < this.entities.length; i++) {
 		this.entities[i].draw(this.ctx);
 	}
@@ -259,13 +257,9 @@ GameEngine.prototype.update = function() {
 }
 
 GameEngine.prototype.loop = function() {
-	console.log("inside loop");
 	this.clockTick = this.timer.tick();
-	console.log("tick set");
 	this.update();
-	console.log("update completed");
 	this.draw();
-	console.log("draw completed");
 	this.click = null;
 }
 
