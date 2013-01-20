@@ -1,4 +1,4 @@
-function Projectile(game, x, y, angle, targetXy) {
+/*function Projectile(game, x, y, angle, targetXy) {
 	Entity.call(this, game, x, y);
 	this.angle = angle;
 	this.targetXy = targetXy;
@@ -56,7 +56,7 @@ ProjectileExplosion.prototype.update = function() {
 
 	}
 }
-
+*/
 function Player(game, color) {
 	console.log("creating new player" + color);
 	this.baseList = [];	
@@ -72,27 +72,40 @@ function Player(game, color) {
 //Although, this should not matter as the image will
 //change according to its ownership... now where to add
 //ownership...
-function Base(game, x, y, path) {
+function Base(game, x, y, path, size, owner) {
 	console.log("Creating a base");
 	this.x = x;
 	this.y = y;
 	Entity.call(this, game, this.x, this.y);
 	this.sprite = ASSET_MANAGER.getAsset(path);
-	this.ownership = '';
+	this.ownership = owner;
+	this.size = size;
+	this.selected = false;
+	this.radius = this.sprite.height/2;
 }
 
 Base.prototype = new Entity();
 Base.prototype.constructor = Base;
 
 Base.prototype.update = function() {
-	if(this.game.click) {
+	/*if(this.game.click) {
 		this.shoot();
 	}
+	*/
 }
 
 Base.prototype.draw = function(ctx) {
 	console.log("drawing Base");
 	this.drawSpriteCentered(ctx);
+	if (this.selected){
+		if(this.size = 'L') {
+			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Large.png'), (this.x - 50), (this.y - 50));
+		} else if (this.size = 'M') {
+			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Medium.png'), (this.x - 25), (this.y - 25));
+		}else {
+			ctx.drawImage(ASSET_MANAGER.getAsset('img/Click-Option-Small.png'), (this.x - 12.5), (this.y - 12.5));
+		}
+	}
 	//ctx.drawImage(this.sprite, this.x, this.y);
 }
 
@@ -104,6 +117,7 @@ Base.prototype.shoot = function() {
 
 ///Main game object for BaseWar
 function BaseWar() {
+	this.selected = [];
 	GameEngine.call(this);
 }
 BaseWar.prototype = new GameEngine();
@@ -146,10 +160,10 @@ BaseWar.prototype.start = function() {
 	//only four bases
 
 
-	this.base1 = new Base(this, 10, 10, 'img/Green-Large.png');
-	this.base2 = new Base(this, 200, 330, 'img/Red-Small.png');
-	this.base3 = new Base(this, -50, 300, 'img/Grey-Medium.png');
-	this.base4 = new Base(this, 200, -200, 'img/Grey-Large.png');
+	this.base1 = new Base(this, 10, 10, 'img/Green-Large.png', 'L', this.player1);
+	this.base2 = new Base(this, 100,100, 'img/Red-Small.png', 'S', this.player2);
+	this.base3 = new Base(this, -75,-75, 'img/Green-Medium.png', 'M', this.player1);
+	this.base4 = new Base(this, 100, -100, 'img/Gray-Large.png', 'L', this.player2);
 	this.addEntity(this.base1);
 	this.addEntity(this.base2);
 	this.addEntity(this.base3);
@@ -160,10 +174,51 @@ BaseWar.prototype.start = function() {
 }
 
 BaseWar.prototype.update = function() {
+	if (this.click) {
+		for (var i = 0; i < this.entities.length; i++) {
+			var base = this.entities[i];
+			if (base instanceof Base && this.isClicked(base)) {
+				console.log("base has been clicked");
+				base.selected = true;
+			}
+		}
+	}
+
 	GameEngine.prototype.update.call(this);
+}
+
+BaseWar.prototype.isClicked = function(base) {
+	var distance_squared = (((this.click.x - base.x) * (this.click.x - base.x)) + ((this.click.y - base.y) * (this.click.y - base.y)));
+	return distance_squared < base.radius;
 }
 
 BaseWar.prototype.draw = function () {
 	console.log("BaseWar draw function");
 	GameEngine.prototype.draw.call(this);
 }
+
+
+//Jack Off Material
+//Fickin bicshit
+/*
+	if (this.game.click) {
+		this.shoot();
+
+
+Sentry.prototype.shoot = function() {
+	var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
+	this.game.addEntity(bullet);
+	ASSET_MANAGER.getSound('audio/bullet.mp3').play();
+}
+
+	this.radius = (this.animation.frameWidth/2) * this.scaleFactor();
+
+	for (var i = 0; i < this.game.entities.length; i++) {
+		var alien = this.game.entities[i];
+		if (alien instanceof Alien && this.isCaughtInExplosion(alien)) {
+			console.log("HIT!!");
+			this.game.score += 10;
+			alien.explode();
+		}
+	}	
+*/
