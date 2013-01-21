@@ -7,7 +7,9 @@
 	</head>
 	<body>
 		<!-- Main game canvas element-->
-		<canvas id="surface" width="800" height="600" style="border: 1px solid red; background: black"></canvas>
+		<canvas id="background-background" width ="800" height="600" style="top: 0; left: 0; z-index: -2; position: absolute; background: black;"></canvas>
+		<canvas id="background" width ="800" height="600" style="top: 0; left: 0; background: url(/game/img/super-mario-background.jpg); opacity: 0.5; z-index: -1; position: absolute;"></canvas>
+		<canvas id="surface" width="800" height="600" style="top: 0; left: 0;border: 1px solid red; position: absolute;"></canvas>
 		<!-- Load soundManager -->
 		<script type="text/javascript" src="script/soundmanager2.js"></script>
 		<!-- Load the core game engine and objects -->
