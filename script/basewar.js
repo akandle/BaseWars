@@ -120,6 +120,7 @@ Base.prototype.draw = function(ctx) {
 ///Main game object for BaseWar
 function BaseWar() {
 	this.selections = [];
+	this.selections.length = 0;
 	this.activePlayers = [];
 	GameEngine.call(this);
 }
@@ -181,29 +182,39 @@ BaseWar.prototype.update = function() {
 		var baseListEnd = false;
 		var i = 0;
 		while(!baseListEnd){
-				var base = this.entities[i];
-				if (base instanceof Base && this.isClicked(base)) {
-					baseListEnd = true;
-					if (base.ownership === 'player2' && this.selections) {
-						//Shoot method... not sure on this one yet
-					} else if (base.ownership === 'player1') {
-						console.log("base selected .... ?");
-						//add to selected bases array
-						//set firstClick to true
-						base.selected = true;
-						this.addSelection(base);
-
-					} else {
-						for (var i = 0; i < this.selections.length; i++) {
-							this.selections[i].selected = false;
-						}
-						this.addSelection.length = 0;
+			console.log("start of base parse")
+			var base = this.entities[i];
+			if (base instanceof Base && this.isClicked(base)) {
+				baseListEnd = true;
+				if (base.ownership === 'player2' && this.selections.length > 0) {
+					//Shoot method... not sure on this one yet
+					console.log("enemy while active clicked")
+				} else if (base.ownership === 'player1') {
+					console.log("base selected .... ?");
+					//add to selected bases array
+					//set firstClick to true
+					base.selected = true;
+					this.addSelection(base);
+				} /*else {
+					console.log('is this thing working?');
+					for (var j = 0; j < this.selections.length; j++) {
+						this.selections[j].selected = false;
+						console.log("should clear....")
 					}
-					//nothing should be selected if-
-					//no base is selected and user click enemy
-					//user clicks nothingness
+					this.selections.length = 0;
+					baseListEnd = true;
+				}*/
+				//nothing should be selected if-
+				//no base is selected and user click enemy
+				//user clicks nothingness
+			}
+			if (i >= this.entities.length) {
+				console.log('is this thing working?');
+				for (var j = 0; j < this.selections.length; j++) {
+					this.selections[j].selected = false;
+					console.log("should clear....")
 				}
-			if (i === this.entities.length-1) {
+				this.selections.length = 0;
 				baseListEnd = true;
 			}
 			i++;
@@ -215,8 +226,6 @@ BaseWar.prototype.update = function() {
 
 BaseWar.prototype.isClicked = function(base) {
 	var distance_squared = (((this.click.x - base.x) * (this.click.x - base.x)) + ((this.click.y - base.y) * (this.click.y - base.y)));
-	console.log("distance " + distance_squared);
-	console.log("Radius " + base.radius);
 	return distance_squared < (base.radius * base.radius);
 }
 
