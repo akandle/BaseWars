@@ -82,7 +82,8 @@ function Base(game, x, y, path, size, owner) {
 	this.ownership = owner;
 	this.size = size;
 	this.selected = false;
-	this.radius = this.sprite.height/2;
+	this.radius = this.sprite.width/2;
+	console.log(this.radius);
 }
 
 Base.prototype = new Entity();
@@ -177,25 +178,35 @@ BaseWar.prototype.start = function() {
 BaseWar.prototype.update = function() {
 	if (this.click) {
 		console.log("click detected");
-		for (var i = 0; i < this.entities.length; i++) {
-			var base = this.entities[i];
-			if (base instanceof Base && this.isClicked(base)) {
-				if (base.ownership === 'player2' && this.selections) {
-					//Shoot method... not sure on this one yet
-				} else if (base.ownership === 'player1') {
-					console.log("base selected .... ?");
-					//add to selected bases array
-					//set firstClick to true
-					base.selected = true;
-					this.addSelection(base);
+		var baseListEnd = false;
+		var i = 0;
+		while(!baseListEnd){
+				var base = this.entities[i];
+				if (base instanceof Base && this.isClicked(base)) {
+					baseListEnd = true;
+					if (base.ownership === 'player2' && this.selections) {
+						//Shoot method... not sure on this one yet
+					} else if (base.ownership === 'player1') {
+						console.log("base selected .... ?");
+						//add to selected bases array
+						//set firstClick to true
+						base.selected = true;
+						this.addSelection(base);
 
-				} else {
-					this.addSelection.length = 0;
+					} else {
+						for (var i = 0; i < this.selections.length; i++) {
+							this.selections[i].selected = false;
+						}
+						this.addSelection.length = 0;
+					}
+					//nothing should be selected if-
+					//no base is selected and user click enemy
+					//user clicks nothingness
 				}
-				//nothing should be selected if-
-				//no base is selected and user click enemy
-				//user clicks nothingness
+			if (i === this.entities.length-1) {
+				baseListEnd = true;
 			}
+			i++;
 		}
 	}
 
@@ -204,7 +215,9 @@ BaseWar.prototype.update = function() {
 
 BaseWar.prototype.isClicked = function(base) {
 	var distance_squared = (((this.click.x - base.x) * (this.click.x - base.x)) + ((this.click.y - base.y) * (this.click.y - base.y)));
-	return distance_squared < base.radius;
+	console.log("distance " + distance_squared);
+	console.log("Radius " + base.radius);
+	return distance_squared < (base.radius * base.radius);
 }
 
 BaseWar.prototype.draw = function () {
