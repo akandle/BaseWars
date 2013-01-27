@@ -1,27 +1,6 @@
-/*function Projectile(game, x, y, angle, targetXy) {
-	Entity.call(this, game, x, y);
-	this.angle = angle;
-	this.targetXy = targetXy;
-	this.speed = 100;
-	this.radial_distance = 10;
-	this.sprite = ASSET_MANAGER.getAsset('img/bullet.png');
-	this.animation = new Animation (this.sprite, 7, 0.05, true);
-}
 
-Projectile.prototype = new Entity();
-Projectile.prototype.contructor = Projectile;
 
-Projectile.prototype.update = function() {
-	if (Math.abs(this.x) >= Math.abs(targetXy.x) || Math.abs(this.y) >= Math.abs(targetXy.y)) {
-		ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
-		this.game.addEntity(new ProjectileExplosion(this.game, this.targetXy.x, this.targetXy.y));
-		this.removeFromWorld = true;
-	} else {
-		this.x = this.radial_distance * Math.cos(this.angle);
-		this.y = this.radial_distance * Math.sin(this.angle);
-		this.radial_distance += this.speed * this.game.clockTick;
-	}
-}
+
 
 Projectile.prototype.draw = function(ctx) {
 	ctx.save();
@@ -56,7 +35,7 @@ ProjectileExplosion.prototype.update = function() {
 
 	}
 }
-*/
+
 function Player(game, color, name) {
 	console.log("creating new player " + color);
 	this.baseList = [];	
@@ -84,6 +63,9 @@ function Base(game, x, y, path, size, owner) {
 	this.selected = false;
 	this.radius = this.sprite.width/2;
 	console.log(this.radius);
+	this.energyValue = 0;
+
+	
 }
 
 Base.prototype = new Entity();
@@ -94,6 +76,8 @@ Base.prototype.update = function() {
 		this.shoot();
 	}
 	*/
+	//energyupdate
+
 }
 
 Base.prototype.draw = function(ctx) {
@@ -109,6 +93,48 @@ Base.prototype.draw = function(ctx) {
 		}
 	}
 	//ctx.drawImage(this.sprite, this.x, this.y);
+}
+
+Base.prototype.shoot = function(targetX, targetY) {
+
+	//this.angle = Math.atan2(this.game.mouse.y, this.game.mouse.x);
+	var angle = Math.atan2((targetY - this.y), (targetX - this.x));
+	if (angle < 0) {
+		angle += Math.PI * 2;
+	}
+
+	var startingCoordX = (Math.cos(angle) * this.radius);
+	var startingCoordY = (Math.sin(angle) * this.radius);
+
+	var projectile = new Projectile(this.game, startingCoordX, startingCoordY, angle,targetX, targetY, this.ownership, this.radius)
+
+}
+
+function Projectile(game, startingX, startingY, angle, targetX, targetY, owner, radialDistance) {
+	Entity.call(this, game, startingX, startingY);
+	this.angle = angle;
+	this.targetX = targetX;
+	this.targetY = targetY;
+	this.speed = 10;
+	this.radialDistance = radialDistance;
+	this.sprite = ASSET_MANAGER.getAsset('img/bullet.png');
+	this.animation = new Animation (this.sprite, 7, 0.05, true);
+	this.owner = owner;
+}
+
+Projectile.prototype = new Entity();
+Projectile.prototype.contructor = Projectile;
+
+Projectile.prototype.update = function() {
+	if (Math.abs(this.x) >= Math.abs(this.targetX) || Math.abs(this.y) >= Math.abs(this.targetY)) {
+		ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
+		this.game.addEntity(new ProjectileExplosion(this.game, this.targetX, this.targetY));
+		this.removeFromWorld = true;
+	} else {
+		this.x = this.radial_distance * Math.cos(this.angle);
+		this.y = this.radial_distance * Math.sin(this.angle);
+		this.radial_distance += this.speed * this.game.clockTick;
+	}
 }
 
 /*Base.prototype.shoot = function() {
@@ -184,10 +210,12 @@ BaseWar.prototype.update = function() {
 		while(!baseListEnd){
 			console.log("start of base parse")
 			var base = this.entities[i];
+
 			if (base instanceof Base && this.isClicked(base)) {
+
 				baseListEnd = true;
 				if (base.ownership === 'player2' && this.selections.length > 0) {
-					//Shoot method... not sure on this one yet
+					this.shootAtTarget(base);
 					console.log("enemy while active clicked")
 				} else if (base.ownership === 'player1') {
 					console.log("base selected .... ?");
@@ -195,18 +223,7 @@ BaseWar.prototype.update = function() {
 					//set firstClick to true
 					base.selected = true;
 					this.addSelection(base);
-				} /*else {
-					console.log('is this thing working?');
-					for (var j = 0; j < this.selections.length; j++) {
-						this.selections[j].selected = false;
-						console.log("should clear....")
-					}
-					this.selections.length = 0;
-					baseListEnd = true;
-				}*/
-				//nothing should be selected if-
-				//no base is selected and user click enemy
-				//user clicks nothingness
+				} 
 			}
 			if (i >= this.entities.length) {
 				console.log('is this thing working?');
@@ -237,6 +254,24 @@ BaseWar.prototype.addSelection = function(base) {
 	this.selections.push(base);
 }
 
+BaseWar.prototype.shootAtTarget = function(target) {
+	var targetBase = target;
+	var targetBaseX = targetBase.x;
+	var targetBaseY = targetBase.y;
+	var baseSelectedLength = this.selections.length;
+	console.log(baseSelectedLength);
+	for (var i=0;i<baseSelectedLength;i++) {
+		var originBase = this.selections[i];
+
+		originBase.shoot(targetBaseX, targetBaseY);
+	}
+
+
+
+
+	Entity.prototype.update.call(this);
+
+};
 
 //for illustrative purposes
 /*
@@ -261,3 +296,8 @@ Sentry.prototype.shoot = function() {
 		}
 	}	
 */
+
+
+
+
+

@@ -240,7 +240,7 @@ EvilAliens.prototype.update = function() {
 
 EvilAliens.prototype.draw = function() {
 	if (this.gameOver == true) {
-		console.log("testing this damn gameover variable")
+		console.log("game over")
 	} else {
 		GameEngine.prototype.draw.call(this, function(game) {
 			game.drawScore();
