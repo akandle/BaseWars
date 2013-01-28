@@ -104,8 +104,8 @@ Base.prototype.shoot = function(targetX, targetY) {
 		angle += Math.PI * 2;
 	}
 
-	var startingCoordX = (Math.cos(angle) * this.radius);
-	var startingCoordY = (Math.sin(angle) * this.radius);
+	var startingCoordX = (Math.cos(angle) * this.radius) + this.x;
+	var startingCoordY = (Math.sin(angle) * this.radius) + this.y;
 
 	var projectile = new Projectile(this.game, startingCoordX, startingCoordY, angle,targetX, targetY, this.ownership, this.radius);
 	this.game.addEntity(projectile);
@@ -116,6 +116,10 @@ function Projectile(game, startingX, startingY, angle, targetX, targetY, owner, 
 	console.log("projectile");
 	Entity.call(this, game, startingX, startingY);
 	this.angle = angle;
+	this.x = startingX;
+	this.y = startingY;
+	this.startingX = startingX;
+	this.startingY = startingY;
 	this.targetX = targetX;
 	this.targetY = targetY;
 	this.speed = 10;
@@ -135,10 +139,8 @@ Projectile.prototype.update = function() {
 		this.game.addEntity(new ProjectileExplosion(this.game, this.targetX, this.targetY));
 		this.removeFromWorld = true;
 	} else {
-		this.x = this.radialDistance * Math.cos(this.angle);
-		console.log(this.x);
-		this.y = this.radialDistance * Math.sin(this.angle);
-		console.log(this.y);
+		this.x = this.radialDistance * Math.cos(this.angle) + this.startingX;
+		this.y = this.radialDistance * Math.sin(this.angle) + this.startingY;
 		this.radialDistance += this.speed * this.game.clockTick;
 	}
 }
