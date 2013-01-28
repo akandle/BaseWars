@@ -96,6 +96,7 @@ Base.prototype.draw = function(ctx) {
 }
 
 Base.prototype.shoot = function(targetX, targetY) {
+	console.log("fire!");
 
 	//this.angle = Math.atan2(this.game.mouse.y, this.game.mouse.x);
 	var angle = Math.atan2((targetY - this.y), (targetX - this.x));
@@ -106,11 +107,13 @@ Base.prototype.shoot = function(targetX, targetY) {
 	var startingCoordX = (Math.cos(angle) * this.radius);
 	var startingCoordY = (Math.sin(angle) * this.radius);
 
-	var projectile = new Projectile(this.game, startingCoordX, startingCoordY, angle,targetX, targetY, this.ownership, this.radius)
+	var projectile = new Projectile(this.game, startingCoordX, startingCoordY, angle,targetX, targetY, this.ownership, this.radius);
+	this.game.addEntity(projectile);
 
 }
 
 function Projectile(game, startingX, startingY, angle, targetX, targetY, owner, radialDistance) {
+	console.log("projectile");
 	Entity.call(this, game, startingX, startingY);
 	this.angle = angle;
 	this.targetX = targetX;
@@ -126,15 +129,27 @@ Projectile.prototype = new Entity();
 Projectile.prototype.contructor = Projectile;
 
 Projectile.prototype.update = function() {
+	console.log("proj update");
 	if (Math.abs(this.x) >= Math.abs(this.targetX) || Math.abs(this.y) >= Math.abs(this.targetY)) {
 		ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
 		this.game.addEntity(new ProjectileExplosion(this.game, this.targetX, this.targetY));
 		this.removeFromWorld = true;
 	} else {
-		this.x = this.radial_distance * Math.cos(this.angle);
-		this.y = this.radial_distance * Math.sin(this.angle);
-		this.radial_distance += this.speed * this.game.clockTick;
+		this.x = this.radialDistance * Math.cos(this.angle);
+		console.log(this.x);
+		this.y = this.radialDistance * Math.sin(this.angle);
+		console.log(this.y);
+		this.radialDistance += this.speed * this.game.clockTick;
 	}
+}
+
+Projectile.prototype.draw = function(ctx) {
+	ctx.save();
+	ctx.translate(this.x, this.y);
+	ctx.rotate(this.angle + Math.PI/2);
+	ctx.translate(-this.x, -this.y);
+	this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+	ctx.restore();
 }
 
 /*Base.prototype.shoot = function() {
@@ -262,6 +277,7 @@ BaseWar.prototype.shootAtTarget = function(target) {
 	console.log(baseSelectedLength);
 	for (var i=0;i<baseSelectedLength;i++) {
 		var originBase = this.selections[i];
+		console.log("shot!");
 
 		originBase.shoot(targetBaseX, targetBaseY);
 	}
