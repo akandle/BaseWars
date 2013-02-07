@@ -75,7 +75,7 @@ function Projectile(game, startingX, startingY, angle, targetX, targetY, owner, 
 	this.startingY = startingY;
 	this.targetX = targetX;
 	this.targetY = targetY;
-	this.speed = 10;
+	this.speed = 20;
 	this.radialDistance = radialDistance;
 	this.sprite = ASSET_MANAGER.getAsset('img/bullet.png');
 	this.animation = new Animation (this.sprite, 7, 0.05, true);
@@ -107,15 +107,6 @@ Projectile.prototype.draw = function(ctx) {
 	ctx.restore();
 }
 
-Projectile.prototype.draw = function(ctx) {
-	ctx.save();
-	ctx.translate(this.x, this.y);
-	ctx.rotate(this.angle + Math.PI/2);
-	ctx.translate(-this.x, -this.y);
-	this.animation.drawFram(this.game.clockTick, ctx, this.x, this.y);
-	ctx.restore();
-}
-
 function ProjectileExplosion(game, x, y) {
 	Entity.call(this, game, x, y);
 	this.sprite = ASSET_MANAGER.getAsset('img/explosion.png');
@@ -133,7 +124,7 @@ ProjectileExplosion.prototype.update = function() {
 		return;
 	}
 
-	this.radius = (this.animation.frameWidth/2) * this.scaleFactor();
+	this.radius = (this.animation.frameWidth/2) * 1;
 	for (var i = 0; i < this.game.entities.length; i++) {
 	}
 }
